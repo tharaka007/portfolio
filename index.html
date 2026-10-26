@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tharaka — Frontend Developer</title>
+  <meta name="description" content="Tharaka — frontend developer building fast, animated, modern websites with WordPress, Next.js and Three.js." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Preloader -->
+  <div class="preloader" id="preloader">
+    <div class="preloader__code">&lt;/&gt;</div>
+    <div class="preloader__bar"><span id="preloaderBar"></span></div>
+    <div class="preloader__count" id="preloaderCount">0%</div>
+  </div>
+
+  <!-- Custom cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+
+  <!-- Navigation -->
+  <header class="nav" id="nav">
+    <div class="container nav__inner">
+      <a href="#home" class="logo"><span class="logo__mark">&lt;/&gt;</span> Tharaka<span class="accent">.</span></a>
+      <nav class="nav__links" id="navLinks">
+        <a href="#home" class="active">Home</a>
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <a href="#contact" class="btn btn--primary btn--sm magnetic nav__cta">Hire Me <span class="arrow">↗</span></a>
+      <button class="nav__toggle" id="navToggle" aria-label="Open menu"><span></span><span></span></button>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="home">
+      <canvas id="heroCanvas" class="hero__canvas"></canvas>
+      <div class="container hero__grid">
+        <div class="hero__text">
+          <span class="tag reveal-up">I'M A FRONTEND DEVELOPER</span>
+          <h1 class="hero__title">
+            <span class="line"><span class="split">Hi, I'm <span class="gradient-text">Tharaka</span></span></span>
+            <span class="line"><span class="split">I build things</span></span>
+            <span class="line"><span class="split">for the <span class="typed" id="typed">web.</span><span class="caret">|</span></span></span>
+          </h1>
+          <p class="hero__lead reveal-up">A frontend developer crafting fast, immersive digital experiences with WordPress, Next.js and creative WebGL.</p>
+          <div class="hero__actions reveal-up">
+            <a href="#projects" class="btn btn--primary magnetic">View My Work <span class="arrow">↗</span></a>
+            <a href="#" class="btn btn--ghost magnetic">Download CV <span class="arrow">↓</span></a>
+          </div>
+          <div class="hero__tech reveal-up">
+            <p class="eyebrow-sm">TECHNOLOGIES I WORK WITH</p>
+            <ul class="chips">
+              <li>HTML</li><li>CSS</li><li>JS</li><li>TS</li><li>React</li><li>Next.js</li><li>WordPress</li><li>Three.js</li><li>GSAP</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="hero__visual">
+          <div class="code-card" id="codeCard">
+            <div class="code-card__head"><span>&lt;/&gt; developer.js</span><i></i></div>
+<pre><code><span class="k">const</span> developer = {
+  name: <span class="s">"Tharaka"</span>,
+  stack: [<span class="s">"Next.js"</span>, <span class="s">"WordPress"</span>,
+          <span class="s">"Three.js"</span>, <span class="s">"GSAP"</span>],
+  passion: <span class="s">"Building things
+           for the web"</span>
+};</code></pre>
+          </div>
+        </div>
+      </div>
+      <a href="#about" class="scroll-hint"><span></span>Scroll</a>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section about" id="about">
+      <div class="container about__grid">
+        <div>
+          <span class="tag" data-reveal>ABOUT ME</span>
+          <h2 class="h2" data-reveal>I'm passionate about<br />creating digital solutions</h2>
+          <p class="muted" data-reveal>I help businesses and individuals turn ideas into fast, accessible, beautifully animated websites — from custom WordPress builds to modern Next.js apps.</p>
+          <a href="#contact" class="btn btn--ghost magnetic" data-reveal>Let's talk <span class="arrow">→</span></a>
+        </div>
+        <div class="stats">
+          <div class="stat" data-stagger><div class="stat__icon">◷</div><div><strong data-count="4">0</strong><b>+</b><span>Years Experience</span></div></div>
+          <div class="stat" data-stagger><div class="stat__icon">&lt;/&gt;</div><div><strong data-count="50">0</strong><b>+</b><span>Projects Completed</span></div></div>
+          <div class="stat" data-stagger><div class="stat__icon">☺</div><div><strong data-count="30">0</strong><b>+</b><span>Happy Clients</span></div></div>
+          <div class="stat" data-stagger><div class="stat__icon">★</div><div><strong data-count="100">0</strong><b>%</b><span>Client Satisfaction</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="section skills" id="skills">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow" data-reveal>MY SKILLS</span>
+          <h2 class="h2" data-reveal>Technologies I Master</h2>
+          <i class="rule" data-reveal></i>
+        </div>
+        <div class="skills__grid">
+          <div class="skill" data-stagger><div class="skill__top"><span class="skill__ico">H</span>HTML<em>95%</em></div><div class="bar"><span data-w="95"></span></div></div>
+          <div class="skill" data-stagger><div class="skill__top"><span class="skill__ico">R</span>React.js<em>85%</em></div><div class="bar"><span data-w="85"></span></div></div>
+          <div class="skill" data-stagger><div class="skill__top"><span class="skill__ico">W</span>WordPress<em>95%</em></div><div class="bar"><span data-w="95"></span></div></div>
+          <div class="skill" data-stagger><div class="skill__top"><span class="skill__ico">C</span>CSS / SCSS<em>90%</em></div><div class="bar"><span data-w="90"></span></div></div>
+          <div class="skill" data-stagger><div class="skill__top"><span class="skill__ico">N</span>Next.js<em>85%</em></div><div class="bar"><span data-w="85"></span></div></div>
+          <div class="skill" data-stagger><div class="skill__top"><span class="skill__ico">T</span>Tailwind CSS<em>90%</em></div><div class="bar"><span data-w="90"></span></div></div>
+          <div class="skill" data-stagger><div class="skill__top"><span class="skill__ico">JS</span>JavaScript<em>90%</em></div><div class="bar"><span data-w="90"></span></div></div>
+          <div class="skill" data-stagger><div class="skill__top"><span class="skill__ico">3D</span>Three.js<em>75%</em></div><div class="bar"><span data-w="75"></span></div></div>
+          <div class="skill" data-stagger><div class="skill__top"><span class="skill__ico">G</span>GSAP<em>85%</em></div><div class="bar"><span data-w="85"></span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <span>Creative Development</span><i>✦</i><span>WordPress</span><i>✦</i><span>Next.js</span><i>✦</i><span>WebGL</span><i>✦</i><span>Motion Design</span><i>✦</i>
+        <span>Creative Development</span><i>✦</i><span>WordPress</span><i>✦</i><span>Next.js</span><i>✦</i><span>WebGL</span><i>✦</i><span>Motion Design</span><i>✦</i>
+      </div>
+    </div>
+
+    <!-- PROJECTS -->
+    <section class="section projects" id="projects">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow" data-reveal>FEATURED PROJECTS</span>
+          <h2 class="h2" data-reveal>Some of My Recent Work</h2>
+          <i class="rule" data-reveal></i>
+        </div>
+        <div class="projects__grid">
+          <article class="card tilt" data-stagger>
+            <div class="card__media card__media--1"><span class="card__num">01</span><div class="mock mock--shop"></div></div>
+            <div class="card__body">
+              <h3>E-Commerce Platform</h3>
+              <p>Multi-vendor marketplace with modern UI/UX and local payments.</p>
+              <a href="#" class="link">View Project <span>↗</span></a>
+            </div>
+          </article>
+          <article class="card tilt" data-stagger>
+            <div class="card__media card__media--2"><span class="card__num">02</span><div class="mock mock--app"></div></div>
+            <div class="card__body">
+              <h3>Sinhala Astrology Site</h3>
+              <p>Content-rich Next.js website with fast, localized pages.</p>
+              <a href="#" class="link">View Project <span>↗</span></a>
+            </div>
+          </article>
+          <article class="card tilt" data-stagger>
+            <div class="card__media card__media--3"><span class="card__num">03</span><div class="mock mock--chart"></div></div>
+            <div class="card__body">
+              <h3>School Website</h3>
+              <p>Custom WordPress build, easy for staff to update.</p>
+              <a href="#" class="link">View Project <span>↗</span></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section contact" id="contact">
+      <div class="container contact__grid">
+        <div data-reveal>
+          <span class="eyebrow">LET'S WORK TOGETHER</span>
+          <h2 class="h2">Have a project in mind?</h2>
+          <p class="muted">I'm always open to new projects and opportunities. Let's create something amazing together.</p>
+          <a href="mailto:hello@example.com" class="btn btn--primary magnetic">Get In Touch <span class="arrow">↗</span></a>
+        </div>
+        <blockquote class="quote" data-reveal>
+          <span class="quote__mark">“</span>
+          <p>Tharaka delivers high-quality work on time. His attention to detail and problem-solving skills are outstanding.</p>
+          <footer><span class="avatar">C</span><div><strong>Client Name</strong><small>Company</small></div></footer>
+        </blockquote>
+        <div data-reveal>
+          <span class="eyebrow">FOLLOW ME</span>
+          <ul class="socials">
+            <li><a href="https://github.com/tharaka007" target="_blank" rel="noopener" class="magnetic">GH</a></li>
+            <li><a href="#" class="magnetic">in</a></li>
+            <li><a href="#" class="magnetic">X</a></li>
+            <li><a href="#" class="magnetic">IG</a></li>
+          </ul>
+          <p class="contact__line">✉ hello@example.com</p>
+          <p class="contact__line">☎ +94 XX XXX XXXX</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p>© <span id="year"></span> Tharaka. All rights reserved.</p>
+      <p>Made with <span class="accent">♥</span> in Sri Lanka</p>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="js/scene.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
