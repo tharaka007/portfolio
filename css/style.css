@@ -333,3 +333,4 @@ img { max-width: 100%; display: block; }
   .tl__dot, .tl:nth-of-type(even) .tl__dot { left: 0; right: auto; }
   .edu { grid-template-columns: 1fr; }
 }
+.edu--single { grid-template-columns: 1fr; max-width: 460px; }
