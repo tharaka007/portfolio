@@ -54,7 +54,7 @@ function heroIntro() {
 /* ---------- Typing word loop ---------- */
 function startTyping() {
   const el = document.getElementById("typed");
-  const words = ["web.", "screen.", "future.", "users."];
+  const words = ["web.", "users.", "speed.", "scale."];
   let i = 0;
   const loop = () => {
     i = (i + 1) % words.length;
@@ -199,3 +199,20 @@ if (window.matchMedia("(hover: hover)").matches && !reduced) {
     );
   });
 }
+
+/* ---------- Experience timeline ---------- */
+gsap.to("#timelineProgress", {
+  scaleY: 1, ease: "none",
+  scrollTrigger: { trigger: "#timeline", start: "top 70%", end: "bottom 70%", scrub: 0.6 },
+});
+gsap.utils.toArray("[data-tl]").forEach((item, i) => {
+  const fromLeft = window.innerWidth > 760 && i % 2 === 0;
+  gsap.from(item.querySelector(".tl__card"), {
+    x: window.innerWidth > 760 ? (fromLeft ? -60 : 60) : 40, opacity: 0, duration: 1, ease: "power3.out",
+    scrollTrigger: { trigger: item, start: "top 85%" },
+  });
+  gsap.from(item.querySelector(".tl__dot"), {
+    scale: 0, duration: 0.6, ease: "back.out(3)",
+    scrollTrigger: { trigger: item, start: "top 80%" },
+  });
+});
