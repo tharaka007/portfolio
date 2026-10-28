@@ -5,19 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tharaka Karunarathne — Senior Software Engineer & Frontend Architect</title>
   <meta name="description" content="Tharaka Karunarathne — Senior Software Engineer & Frontend Architect with 12+ years building fast, scalable, SEO-friendly web experiences with React, Next.js and WordPress." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <meta name="theme-color" content="#07081a" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237c5cff'/%3E%3Ctext x='16' y='21' font-family='monospace' font-size='13' font-weight='700' fill='white' text-anchor='middle'%3E%26lt;/%26gt;%3C/text%3E%3C/svg%3E" />
+  <link rel="preload" href="fonts/space-grotesk.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="css/style.css" />
+  <script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
-
-  <!-- Preloader -->
-  <div class="preloader" id="preloader">
-    <div class="preloader__code">&lt;/&gt;</div>
-    <div class="preloader__bar"><span id="preloaderBar"></span></div>
-    <div class="preloader__count" id="preloaderCount">0%</div>
-  </div>
 
   <!-- Custom cursor -->
   <div class="cursor" id="cursor"></div>
@@ -36,14 +30,14 @@
         <a href="#contact">Contact</a>
       </nav>
       <a href="#contact" class="btn btn--primary btn--sm magnetic nav__cta">Hire Me <span class="arrow">↗</span></a>
-      <button class="nav__toggle" id="navToggle" aria-label="Open menu"><span></span><span></span></button>
+      <button class="nav__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
     </div>
   </header>
 
   <main>
     <!-- HERO -->
     <section class="hero" id="home">
-      <canvas id="heroCanvas" class="hero__canvas"></canvas>
+      <canvas id="heroCanvas" class="hero__canvas" aria-hidden="true"></canvas>
       <div class="container hero__grid">
         <div class="hero__text">
           <span class="tag reveal-up">SENIOR SOFTWARE ENGINEER · FRONTEND ARCHITECT</span>
@@ -106,22 +100,34 @@
       <div class="container">
         <div class="section-head">
           <span class="eyebrow" data-reveal>MY SKILLS</span>
-          <h2 class="h2" data-reveal>Technologies I Master</h2>
+          <h2 class="h2" data-reveal>The Stack I Work With</h2>
           <i class="rule" data-reveal></i>
         </div>
-        <div class="skills__grid">
-          <div class="skill" data-stagger><div class="skill__top"><span class="skill__ico">R</span>React.js<em>90%</em></div><div class="bar"><span data-w="90"></span></div></div>
-          <div class="skill" data-stagger><div class="skill__top"><span class="skill__ico">N</span>Next.js (SSR / SSG)<em>90%</em></div><div class="bar"><span data-w="90"></span></div></div>
-          <div class="skill" data-stagger><div class="skill__top"><span class="skill__ico">W</span>WordPress<em>95%</em></div><div class="bar"><span data-w="95"></span></div></div>
-          <div class="skill" data-stagger><div class="skill__top"><span class="skill__ico">JS</span>JavaScript (ES6+)<em>95%</em></div><div class="bar"><span data-w="95"></span></div></div>
-          <div class="skill" data-stagger><div class="skill__top"><span class="skill__ico">H</span>HTML5 / CSS3 / SASS<em>95%</em></div><div class="bar"><span data-w="95"></span></div></div>
-          <div class="skill" data-stagger><div class="skill__top"><span class="skill__ico">T</span>Tailwind / Bootstrap<em>90%</em></div><div class="bar"><span data-w="90"></span></div></div>
-          <div class="skill" data-stagger><div class="skill__top"><span class="skill__ico">G</span>GSAP / Framer Motion<em>85%</em></div><div class="bar"><span data-w="85"></span></div></div>
-          <div class="skill" data-stagger><div class="skill__top"><span class="skill__ico">3D</span>Three.js<em>75%</em></div><div class="bar"><span data-w="75"></span></div></div>
-          <div class="skill" data-stagger><div class="skill__top"><span class="skill__ico">⚡</span>Performance / Core Web Vitals<em>90%</em></div><div class="bar"><span data-w="90"></span></div></div>
-        </div>
-        <div class="toolbelt" data-reveal>
-          <span>Also:</span> Webpack · Gulp · Git (GitHub / GitLab) · Figma · Photoshop · Lighthouse · GTmetrix · Cursor · Claude Code · GitHub Copilot
+        <div class="stack">
+          <article class="stack__card" data-stagger>
+            <header><span class="stack__ico">&lt;/&gt;</span><div><h3>Core Frontend</h3><p class="stack__yrs">12+ years</p></div></header>
+            <ul class="tags"><li>HTML5</li><li>CSS3</li><li>JavaScript (ES6+)</li><li>SASS / LESS</li><li>BEM</li><li>jQuery</li></ul>
+          </article>
+          <article class="stack__card" data-stagger>
+            <header><span class="stack__ico">⚛</span><div><h3>React &amp; Next.js</h3><p class="stack__yrs">Component-driven apps</p></div></header>
+            <ul class="tags"><li>React.js</li><li>Next.js</li><li>SSR / SSG</li><li>Tailwind CSS</li><li>Bootstrap</li></ul>
+          </article>
+          <article class="stack__card" data-stagger>
+            <header><span class="stack__ico">W</span><div><h3>WordPress &amp; Build</h3><p class="stack__yrs">CMS &amp; tooling</p></div></header>
+            <ul class="tags"><li>WordPress</li><li>Custom themes</li><li>Webpack</li><li>Gulp</li></ul>
+          </article>
+          <article class="stack__card" data-stagger>
+            <header><span class="stack__ico">✦</span><div><h3>Motion &amp; 3D</h3><p class="stack__yrs">Interactive UI</p></div></header>
+            <ul class="tags"><li>GSAP</li><li>ScrollTrigger</li><li>Framer Motion</li><li>Three.js</li><li>WebGL</li></ul>
+          </article>
+          <article class="stack__card" data-stagger>
+            <header><span class="stack__ico">⚡</span><div><h3>Performance &amp; SEO</h3><p class="stack__yrs">Core Web Vitals</p></div></header>
+            <ul class="tags"><li>Lighthouse</li><li>GTmetrix</li><li>Core Web Vitals</li><li>Technical SEO</li><li>Accessibility</li></ul>
+          </article>
+          <article class="stack__card" data-stagger>
+            <header><span class="stack__ico">◆</span><div><h3>Leadership &amp; Workflow</h3><p class="stack__yrs">5+ years leading teams</p></div></header>
+            <ul class="tags"><li>Frontend architecture</li><li>Mentoring</li><li>Code review</li><li>Figma</li><li>Photoshop</li><li>Git (GitHub / GitLab)</li><li>Cursor</li><li>Claude Code</li><li>GitHub Copilot</li></ul>
+          </article>
         </div>
       </div>
     </section>
@@ -142,8 +148,9 @@
           <h2 class="h2" data-reveal>Experience</h2>
           <i class="rule" data-reveal></i>
         </div>
-        <ol class="timeline" id="timeline">
+        <div class="timeline" id="timeline">
           <i class="timeline__line"><i class="timeline__progress" id="timelineProgress"></i></i>
+          <ol class="timeline__list">
           <li class="tl" data-tl>
             <span class="tl__dot tl__dot--now"></span>
             <div class="tl__card">
@@ -192,6 +199,7 @@
             </div>
           </li>
         </ol>
+        </div>
 
         <div class="edu edu--single">
           <div class="edu__item" data-stagger>
@@ -239,6 +247,24 @@
       </div>
     </section>
 
+    <!-- SPEED -->
+    <section class="section speed" id="speed">
+      <div class="container speed__grid">
+        <div>
+          <span class="eyebrow" data-reveal>BUILT FOR SPEED</span>
+          <h2 class="h2" data-reveal>I practise what I preach</h2>
+          <p class="muted" data-reveal>This site's Lighthouse scores on mobile. Self-hosted fonts, CSS-first animation, zero layout shift — and the 3D scene loads the moment you interact, so it never slows the first paint. Fast sites rank higher and convert better.</p>
+          <a href="https://pagespeed.web.dev/analysis?url=https%3A%2F%2Ftharaka007.github.io%2Fportfolio%2F" target="_blank" rel="noopener" class="btn btn--ghost magnetic" data-reveal>Test it yourself <span class="arrow">↗</span></a>
+        </div>
+        <div class="gauges">
+          <div class="gauge" data-score="100" data-stagger><svg viewBox="0 0 36 36"><circle class="gauge__bg" cx="18" cy="18" r="15.915"/><circle class="gauge__arc" cx="18" cy="18" r="15.915" pathLength="100"/></svg><strong class="gauge__num">0</strong><span>Performance</span></div>
+          <div class="gauge" data-score="100" data-stagger><svg viewBox="0 0 36 36"><circle class="gauge__bg" cx="18" cy="18" r="15.915"/><circle class="gauge__arc" cx="18" cy="18" r="15.915" pathLength="100"/></svg><strong class="gauge__num">0</strong><span>Accessibility</span></div>
+          <div class="gauge" data-score="100" data-stagger><svg viewBox="0 0 36 36"><circle class="gauge__bg" cx="18" cy="18" r="15.915"/><circle class="gauge__arc" cx="18" cy="18" r="15.915" pathLength="100"/></svg><strong class="gauge__num">0</strong><span>Best Practices</span></div>
+          <div class="gauge" data-score="100" data-stagger><svg viewBox="0 0 36 36"><circle class="gauge__bg" cx="18" cy="18" r="15.915"/><circle class="gauge__arc" cx="18" cy="18" r="15.915" pathLength="100"/></svg><strong class="gauge__num">0</strong><span>SEO</span></div>
+        </div>
+      </div>
+    </section>
+
     <!-- CONTACT -->
     <section class="section contact" id="contact">
       <div class="container contact__grid">
@@ -275,10 +301,8 @@
     </div>
   </footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="js/scene.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/vendor/gsap.min.js" defer></script>
+  <script src="js/vendor/ScrollTrigger.min.js" defer></script>
+  <script src="js/main.js" defer></script>
 </body>
 </html>

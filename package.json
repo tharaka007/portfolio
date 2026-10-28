@@ -1,0 +1,12 @@
+{
+  "name": "tharaka-portfolio",
+  "private": true,
+  "description": "Static portfolio. Only the hero 3D scene has a build step.",
+  "scripts": {
+    "build": "esbuild src/scene.js --bundle --minify --format=esm --target=es2019 --outfile=js/scene.min.js --legal-comments=none"
+  },
+  "devDependencies": {
+    "esbuild": "0.21.5",
+    "three": "0.160.0"
+  }
+}

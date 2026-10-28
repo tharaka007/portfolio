@@ -2,12 +2,30 @@
 
 Single-page portfolio built with plain HTML, CSS and JavaScript, with Three.js (WebGL hero) and GSAP (ScrollTrigger) animations.
 
+Lighthouse (mobile & desktop): 100 Performance · 100 Accessibility · 100 Best Practices · 100 SEO.
+
 ## Structure
 ```
 index.html
-css/style.css
-js/scene.js   # Three.js hero: noise-displaced particle sphere, wireframe core, star field
-js/main.js    # GSAP: preloader, hero intro, scroll reveals, counters, skill bars, marquee, cursor, magnetic buttons, card tilt
+css/style.css          # all styles, incl. CSS-only hero intro + scroll-reveal transitions
+js/main.js             # IntersectionObserver reveals, GSAP scroll effects, counters, gauges, cursor
+js/vendor/             # self-hosted GSAP + ScrollTrigger
+js/scene.min.js        # built Three.js hero (loaded on first interaction)
+src/scene.js           # source for the 3D scene
+fonts/                 # self-hosted Space Grotesk + JetBrains Mono (woff2)
+```
+
+## Performance notes
+- No preloader; hero paints immediately with CSS animations.
+- Fonts self-hosted, preloaded, with a metric-matched fallback (no layout shift).
+- Scroll reveals use one IntersectionObserver + CSS transitions (no long tasks).
+- Three.js is tree-shaken into `js/scene.min.js` and only loads on first interaction.
+
+## Rebuild the 3D scene
+Only needed after editing `src/scene.js`:
+```
+npm install
+npm run build
 ```
 
 ## Run locally

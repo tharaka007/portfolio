@@ -1,149 +1,37 @@
 /* ------------------------------------------------------------------
-   GSAP animations: preloader, hero intro, scroll reveals, counters,
-   skill bars, marquee, magnetic buttons, card tilt, custom cursor.
+   Main interactions — tuned for speed:
+   • Hero intro is pure CSS (paints with the page).
+   • Scroll reveals use one IntersectionObserver + CSS transitions
+     (no layout thrashing, no long tasks).
+   • GSAP drives scrubbed/scroll-linked effects, set up when idle.
+   • The Three.js scene loads on the visitor's first interaction.
 ------------------------------------------------------------------- */
-gsap.registerPlugin(ScrollTrigger);
-document.body.classList.add("loading");
 document.getElementById("year").textContent = new Date().getFullYear();
 
-const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-/* ---------- Preloader ---------- */
-const loader = { v: 0 };
-gsap.to(loader, {
-  v: 100,
-  duration: reduced ? 0.2 : 1.6,
-  ease: "power2.inOut",
-  onUpdate() {
-    const v = Math.round(loader.v);
-    document.getElementById("preloaderCount").textContent = v + "%";
-    document.getElementById("preloaderBar").style.width = v + "%";
-  },
-  onComplete() {
-    gsap.to("#preloader", {
-      yPercent: -100,
-      duration: 0.9,
-      ease: "power4.inOut",
-      onComplete() {
-        document.getElementById("preloader").remove();
-        document.body.classList.remove("loading");
-      },
-    });
-    heroIntro();
-  },
-});
-
-/* ---------- Hero intro ---------- */
-function heroIntro() {
-  const tl = gsap.timeline({ defaults: { ease: "power4.out" }, delay: 0.35 });
-  tl.from(".nav", { y: -40, opacity: 0, duration: 1 })
-    .from(".hero__title .split", { yPercent: 110, duration: 1.2, stagger: 0.12 }, "-=0.7")
-    .from(".hero .reveal-up", { y: 30, opacity: 0, duration: 1, stagger: 0.1 }, "-=0.9")
-    .from(".chips li", { y: 20, opacity: 0, duration: 0.6, stagger: 0.05 }, "-=0.6")
-    .from("#codeCard", { x: 60, opacity: 0, rotateY: -20, duration: 1.2 }, "-=1.2");
-
-  const s = window.heroScene;
-  if (s) {
-    tl.from(s.group.scale, { x: 0.01, y: 0.01, z: 0.01, duration: 2, ease: "expo.out" }, 0)
-      .from(s.sphereMat.uniforms.uAmp, { value: 2.5, duration: 2.5, ease: "expo.out" }, 0);
-  }
-  startTyping();
-  floatCodeCard();
-}
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const finePointer = matchMedia("(hover: hover)").matches;
+const isDesktop = () => innerWidth > 760;
+const idle = (fn) => ("requestIdleCallback" in window ? requestIdleCallback(fn, { timeout: 1500 }) : setTimeout(fn, 200));
 
 /* ---------- Typing word loop ---------- */
-function startTyping() {
+(function typing() {
+  if (reduced) return;
   const el = document.getElementById("typed");
   const words = ["web.", "users.", "speed.", "scale."];
   let i = 0;
-  const loop = () => {
-    i = (i + 1) % words.length;
-    const tl = gsap.timeline({ onComplete: () => gsap.delayedCall(2, loop) });
-    const txt = { n: el.textContent.length };
-    tl.to(txt, { n: 0, duration: 0.4, ease: "none", onUpdate: () => (el.textContent = el.textContent.slice(0, Math.round(txt.n))) });
-    const next = words[i];
-    const t2 = { n: 0 };
-    tl.to(t2, { n: next.length, duration: 0.5, ease: "none", onUpdate: () => (el.textContent = next.slice(0, Math.round(t2.n))) });
+  const type = (word, n, done) => {
+    el.textContent = word.slice(0, n);
+    if (n < word.length) setTimeout(() => type(word, n + 1, done), 70);
+    else done();
   };
-  gsap.delayedCall(2.5, loop);
-}
-
-function floatCodeCard() {
-  gsap.to("#codeCard", { y: -14, duration: 3, ease: "sine.inOut", yoyo: true, repeat: -1 });
-}
-
-/* ---------- Hero scroll-out (3D scene reacts to scroll) ---------- */
-if (window.heroScene) {
-  const s = window.heroScene;
-  gsap.timeline({
-    scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 1 },
-  })
-    .to(s.camera.position, { z: 5.5, ease: "none" }, 0)
-    .to(s.group.rotation, { z: 0.8, ease: "none" }, 0)
-    .to(s.sphereMat.uniforms.uAmp, { value: 1.2, ease: "none" }, 0)
-    .to(".hero__text", { y: -120, opacity: 0, ease: "none" }, 0)
-    .to(".hero__visual", { yPercent: -30, opacity: 0, ease: "none" }, 0);
-}
-
-/* ---------- Generic reveals ---------- */
-gsap.utils.toArray("[data-reveal]").forEach((el) => {
-  gsap.from(el, {
-    y: 50, opacity: 0, duration: 1, ease: "power3.out",
-    scrollTrigger: { trigger: el, start: "top 88%" },
-  });
-});
-
-ScrollTrigger.batch("[data-stagger]", {
-  start: "top 90%",
-  onEnter: (batch) =>
-    gsap.from(batch, { y: 60, opacity: 0, duration: 0.9, stagger: 0.1, ease: "power3.out", overwrite: true }),
-});
-
-/* ---------- Counters ---------- */
-gsap.utils.toArray("[data-count]").forEach((el) => {
-  const end = +el.dataset.count;
-  const o = { v: 0 };
-  gsap.to(o, {
-    v: end, duration: 2, ease: "power2.out",
-    scrollTrigger: { trigger: el, start: "top 90%" },
-    onUpdate: () => (el.textContent = Math.round(o.v)),
-  });
-});
-
-/* ---------- Skill bars ---------- */
-gsap.utils.toArray(".bar span").forEach((bar) => {
-  gsap.to(bar, {
-    width: bar.dataset.w + "%", duration: 1.6, ease: "power3.out",
-    scrollTrigger: { trigger: bar, start: "top 92%" },
-  });
-});
-
-/* ---------- Marquee (speeds up with scroll velocity) ---------- */
-const marquee = gsap.to(".marquee__track", { xPercent: -50, duration: 22, ease: "none", repeat: -1 });
-ScrollTrigger.create({
-  onUpdate(self) {
-    const v = Math.min(Math.abs(self.getVelocity()) / 400, 4);
-    gsap.to(marquee, { timeScale: (self.direction === -1 ? -1 : 1) * (1 + v), duration: 0.3, overwrite: true });
-    gsap.to(marquee, { timeScale: self.direction === -1 ? -1 : 1, duration: 1.2, delay: 0.3 });
-  },
-});
-
-/* ---------- Nav state + active link ---------- */
-ScrollTrigger.create({
-  start: 60,
-  onToggle: (self) => document.getElementById("nav").classList.toggle("scrolled", self.isActive),
-});
-document.querySelectorAll("main section[id]").forEach((sec) => {
-  ScrollTrigger.create({
-    trigger: sec, start: "top center", end: "bottom center",
-    onToggle: (self) => {
-      if (!self.isActive) return;
-      document.querySelectorAll(".nav__links a").forEach((a) =>
-        a.classList.toggle("active", a.getAttribute("href") === "#" + sec.id)
-      );
-    },
-  });
-});
+  const erase = (done) => {
+    const t = el.textContent;
+    if (t.length) { el.textContent = t.slice(0, -1); setTimeout(() => erase(done), 40); }
+    else done();
+  };
+  const loop = () => erase(() => { i = (i + 1) % words.length; type(words[i], 0, () => setTimeout(loop, 2200)); });
+  setTimeout(loop, 3000);
+})();
 
 /* ---------- Mobile menu ---------- */
 const toggle = document.getElementById("navToggle");
@@ -151,68 +39,185 @@ const links = document.getElementById("navLinks");
 toggle.addEventListener("click", () => {
   const open = links.classList.toggle("open");
   toggle.classList.toggle("open", open);
-  if (open) gsap.from(".nav__links a", { y: 30, opacity: 0, stagger: 0.06, duration: 0.5, ease: "power3.out" });
+  toggle.setAttribute("aria-expanded", open);
 });
 links.querySelectorAll("a").forEach((a) =>
   a.addEventListener("click", () => { links.classList.remove("open"); toggle.classList.remove("open"); })
 );
 
+/* ---------- Nav background on scroll ---------- */
+const nav = document.getElementById("nav");
+let navTick = false;
+addEventListener("scroll", () => {
+  if (navTick) return;
+  navTick = true;
+  requestAnimationFrame(() => { nav.classList.toggle("scrolled", scrollY > 60); navTick = false; });
+}, { passive: true });
+
+/* ---------- Reveal-on-scroll (IntersectionObserver + CSS) ---------- */
+// Stagger index for groups of siblings
+document.querySelectorAll("[data-stagger]").forEach((el) => {
+  const sibs = [...el.parentElement.children].filter((c) => c.hasAttribute("data-stagger"));
+  el.style.setProperty("--i", sibs.indexOf(el));
+});
+document.querySelectorAll(".tags").forEach((ul) =>
+  [...ul.children].forEach((li, i) => li.style.setProperty("--i", i))
+);
+
+const onReveal = new Map(); // element -> callback when it first appears
+const revealIO = new IntersectionObserver((entries) => {
+  entries.forEach((e) => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add("is-in");
+    const cb = onReveal.get(e.target);
+    if (cb) cb(e.target);
+    revealIO.unobserve(e.target);
+  });
+}, { rootMargin: "0px 0px -10% 0px" });
+document.querySelectorAll("[data-reveal], [data-stagger], [data-tl], [data-count], .gauge").forEach((el) => revealIO.observe(el));
+
+/* ---------- Active nav link ---------- */
+const navIO = new IntersectionObserver((entries) => {
+  entries.forEach((e) => {
+    if (!e.isIntersecting) return;
+    document.querySelectorAll(".nav__links a").forEach((a) =>
+      a.classList.toggle("active", a.getAttribute("href") === "#" + e.target.id)
+    );
+  });
+}, { rootMargin: "-50% 0px -50% 0px" });
+document.querySelectorAll("main section[id]").forEach((s) => navIO.observe(s));
+
+/* ---------- GSAP: counters, gauges, scrubbed effects (set up when idle) ---------- */
+function countUp(el, to, onUpdate, duration = 2) {
+  if (reduced || !window.gsap) return onUpdate(to);
+  const o = { v: 0 };
+  gsap.to(o, { v: to, duration, ease: "power2.out", onUpdate: () => onUpdate(o.v) });
+}
+document.querySelectorAll("[data-count]").forEach((el) =>
+  onReveal.set(el, () => countUp(el, +el.dataset.count, (v) => (el.textContent = Math.round(v))))
+);
+document.querySelectorAll(".gauge").forEach((g) => {
+  const arc = g.querySelector(".gauge__arc");
+  const num = g.querySelector(".gauge__num");
+  onReveal.set(g, () => countUp(g, +g.dataset.score, (v) => {
+    arc.style.strokeDashoffset = 100 - v;
+    num.textContent = Math.round(v);
+  }, 1.8));
+});
+
+addEventListener("load", () => idle(() => {
+  if (!window.gsap || !window.ScrollTrigger) return;
+  gsap.registerPlugin(ScrollTrigger);
+
+  if (!reduced) {
+    // Hero text drifts away as you scroll
+    gsap.timeline({ scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 1 } })
+      .to(".hero__text", { y: -120, opacity: 0, ease: "none" }, 0)
+      .to(".hero__visual", { yPercent: -30, opacity: 0, ease: "none" }, 0);
+
+    gsap.to("#codeCard", { y: -14, duration: 3, ease: "sine.inOut", yoyo: true, repeat: -1 });
+
+    // Timeline progress line fills as you scroll
+    gsap.to("#timelineProgress", {
+      scaleY: 1, ease: "none",
+      scrollTrigger: { trigger: "#timeline", start: "top 70%", end: "bottom 70%", scrub: 0.6 },
+    });
+
+    // Marquee speeds up / reverses with scroll velocity
+    const marquee = gsap.to(".marquee__track", { xPercent: -50, duration: 22, ease: "none", repeat: -1 });
+    ScrollTrigger.create({
+      onUpdate(self) {
+        const v = Math.min(Math.abs(self.getVelocity()) / 400, 4);
+        const dir = self.direction === -1 ? -1 : 1;
+        gsap.to(marquee, { timeScale: dir * (1 + v), duration: 0.3, overwrite: true });
+        gsap.to(marquee, { timeScale: dir, duration: 1.2, delay: 0.3 });
+      },
+    });
+  } else {
+    gsap.set("#timelineProgress", { scaleY: 1 });
+  }
+}));
+
+/* ---------- 3D hero: load on first interaction ---------- */
+(function lazyScene() {
+  const canvas = document.getElementById("heroCanvas");
+  const conn = navigator.connection || {};
+  if (!canvas || reduced || conn.saveData) return;
+
+  const start = () =>
+    import("./scene.min.js").then(({ init }) => {
+      const s = init(canvas);
+      canvas.classList.add("is-ready");
+      if (!window.gsap) return;
+      gsap.from(s.group.scale, { x: 0.01, y: 0.01, z: 0.01, duration: 2, ease: "expo.out" });
+      gsap.from(s.sphereMat.uniforms.uAmp, { value: 2.5, duration: 2.5, ease: "expo.out" });
+      if (window.ScrollTrigger) {
+        gsap.timeline({ scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 1 } })
+          .to(s.camera.position, { z: 5.5, ease: "none" }, 0)
+          .to(s.group.rotation, { z: 0.8, ease: "none" }, 0)
+          .to(s.sphereMat.uniforms.uAmp, { value: 1.2, ease: "none" }, 0);
+      }
+    }).catch(() => {});
+
+  // Starting on interaction keeps the first load featherweight;
+  // the GPU work never competes with first paint.
+  const events = ["pointermove", "pointerdown", "touchstart", "wheel", "scroll", "keydown"];
+  let started = false;
+  const go = () => {
+    if (started) return;
+    started = true;
+    events.forEach((e) => removeEventListener(e, go));
+    start();
+  };
+  events.forEach((e) => addEventListener(e, go, { passive: true }));
+})();
+
 /* ---------- Pointer-only effects ---------- */
-if (window.matchMedia("(hover: hover)").matches && !reduced) {
-  // Custom cursor
+if (finePointer && !reduced) {
   const cursor = document.getElementById("cursor");
   const dot = document.getElementById("cursorDot");
-  const cx = gsap.quickTo(cursor, "x", { duration: 0.45, ease: "power3" });
-  const cy = gsap.quickTo(cursor, "y", { duration: 0.45, ease: "power3" });
-  window.addEventListener("pointermove", (e) => {
-    cx(e.clientX); cy(e.clientY);
+  let cx = 0, cy = 0, tx = 0, ty = 0, running = false;
+  const follow = () => {
+    cx += (tx - cx) * 0.18;
+    cy += (ty - cy) * 0.18;
+    cursor.style.transform = `translate3d(${cx}px, ${cy}px, 0) translate(-50%, -50%)`;
+    if (Math.abs(tx - cx) > 0.1 || Math.abs(ty - cy) > 0.1) requestAnimationFrame(follow);
+    else running = false;
+  };
+  addEventListener("pointermove", (e) => {
+    tx = e.clientX; ty = e.clientY;
+    dot.style.transform = `translate3d(${tx}px, ${ty}px, 0) translate(-50%, -50%)`;
     cursor.style.opacity = dot.style.opacity = 1;
-    gsap.set(dot, { x: e.clientX, y: e.clientY });
-  });
+    if (!running) { running = true; requestAnimationFrame(follow); }
+  }, { passive: true });
   document.querySelectorAll("a, button, .card").forEach((el) => {
     el.addEventListener("mouseenter", () => cursor.classList.add("is-hover"));
     el.addEventListener("mouseleave", () => cursor.classList.remove("is-hover"));
   });
 
-  // Magnetic buttons
-  document.querySelectorAll(".magnetic").forEach((el) => {
-    const xTo = gsap.quickTo(el, "x", { duration: 0.6, ease: "elastic.out(1, 0.4)" });
-    const yTo = gsap.quickTo(el, "y", { duration: 0.6, ease: "elastic.out(1, 0.4)" });
-    el.addEventListener("mousemove", (e) => {
-      const r = el.getBoundingClientRect();
-      xTo((e.clientX - r.left - r.width / 2) * 0.35);
-      yTo((e.clientY - r.top - r.height / 2) * 0.35);
+  // Magnetic buttons + 3D tilt cards need GSAP's springy easing
+  addEventListener("load", () => idle(() => {
+    if (!window.gsap) return;
+    document.querySelectorAll(".magnetic").forEach((el) => {
+      const xTo = gsap.quickTo(el, "x", { duration: 0.6, ease: "elastic.out(1, 0.4)" });
+      const yTo = gsap.quickTo(el, "y", { duration: 0.6, ease: "elastic.out(1, 0.4)" });
+      el.addEventListener("mousemove", (e) => {
+        const r = el.getBoundingClientRect();
+        xTo((e.clientX - r.left - r.width / 2) * 0.35);
+        yTo((e.clientY - r.top - r.height / 2) * 0.35);
+      });
+      el.addEventListener("mouseleave", () => { xTo(0); yTo(0); });
     });
-    el.addEventListener("mouseleave", () => { xTo(0); yTo(0); });
-  });
-
-  // 3D tilt cards
-  document.querySelectorAll(".tilt").forEach((card) => {
-    card.addEventListener("mousemove", (e) => {
-      const r = card.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width - 0.5;
-      const py = (e.clientY - r.top) / r.height - 0.5;
-      gsap.to(card, { rotateY: px * 12, rotateX: -py * 12, duration: 0.5, ease: "power2.out" });
+    document.querySelectorAll(".tilt").forEach((card) => {
+      card.addEventListener("mousemove", (e) => {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        gsap.to(card, { rotateY: px * 12, rotateX: -py * 12, duration: 0.5, ease: "power2.out" });
+      });
+      card.addEventListener("mouseleave", () =>
+        gsap.to(card, { rotateY: 0, rotateX: 0, duration: 0.8, ease: "elastic.out(1, 0.5)" })
+      );
     });
-    card.addEventListener("mouseleave", () =>
-      gsap.to(card, { rotateY: 0, rotateX: 0, duration: 0.8, ease: "elastic.out(1, 0.5)" })
-    );
-  });
+  }));
 }
-
-/* ---------- Experience timeline ---------- */
-gsap.to("#timelineProgress", {
-  scaleY: 1, ease: "none",
-  scrollTrigger: { trigger: "#timeline", start: "top 70%", end: "bottom 70%", scrub: 0.6 },
-});
-gsap.utils.toArray("[data-tl]").forEach((item, i) => {
-  const fromLeft = window.innerWidth > 760 && i % 2 === 0;
-  gsap.from(item.querySelector(".tl__card"), {
-    x: window.innerWidth > 760 ? (fromLeft ? -60 : 60) : 40, opacity: 0, duration: 1, ease: "power3.out",
-    scrollTrigger: { trigger: item, start: "top 85%" },
-  });
-  gsap.from(item.querySelector(".tl__dot"), {
-    scale: 0, duration: 0.6, ease: "back.out(3)",
-    scrollTrigger: { trigger: item, start: "top 80%" },
-  });
-});
